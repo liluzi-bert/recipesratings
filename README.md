@@ -117,8 +117,15 @@ Since the p-value (0.13) is greater than the significance level of 0.05, we fail
 There is insufficient evidence to conclude that dessert recipes have a different average calorie content than main dish recipes.
 
 ## Framing a Prediction Problem
-This is a regression problem where the response variable is the average recipe rating.
-Model performance is evaluated using RMSE.
+The goal of this project is to predict the average user rating of a recipe using information that is available at the time the recipe is posted. Recipe ratings summarize overall user satisfaction and provide a meaningful measure of recipe quality, making them a natural target for prediction.
+
+This task is framed as a regression problem because the response variable, average rating, is continuous and takes values on a numerical scale rather than discrete categories.
+
+The response variable used in this prediction problem is avg_rating, which represents the average rating (on a 1–5 scale) assigned by users to a recipe. This variable was chosen because it directly reflects how well a recipe is received by users and aligns with the goal of predicting recipe quality.
+
+The features used for prediction are restricted to information that would be known prior to any user interaction, such as nutritional information (including calories, sugar, fat, and protein), cooking-related metadata (such as the number of steps and cooking time), and features derived from ingredients and recipe tags. User ratings, review counts, or any other post-publication information are excluded to prevent data leakage.
+
+Model performance is evaluated using Root Mean Squared Error (RMSE). RMSE is appropriate for this regression task because it measures prediction error in the same units as the response variable and penalizes larger errors more heavily, which is important when predicting user ratings.
 
 ## Baseline Model
 A baseline regression model using numeric features was trained to establish a performance benchmark.
