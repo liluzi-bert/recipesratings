@@ -57,10 +57,14 @@ tend to have substantially higher calorie counts. This relationship is expected 
 <iframe src="assets/calories_vs_fat.html" width="800" height="600" frameborder="0"></iframe>
 
 ### Interesting Aggregates
-The bar chart below shows the top cuisine tags ranked by average calorie content. Recipes tagged with items such as chicken and dietary tend to have higher average calories, suggesting that certain cuisine categories are associated with more calorie-dense meals.
+The table below compares average ratings between sugary and non-sugary recipes.
 
-<iframe src="assets/top_cuisine_calories.html" width="800" height="600" frameborder="0"></iframe>
+| is_sugary | average_rating |
+|----------|----------------|
+| False    | 4.52           |
+| True     | 4.48           |
 
+Sugary recipes receive slightly lower average ratings, though the difference is small.
 
 ## Assessment of Missingness
 Missingness was assessed for key variables such as calories and cooking time. 
