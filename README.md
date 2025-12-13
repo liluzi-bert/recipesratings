@@ -128,11 +128,24 @@ The features used for prediction are restricted to information that would be kno
 Model performance is evaluated using Root Mean Squared Error (RMSE). RMSE is appropriate for this regression task because it measures prediction error in the same units as the response variable and penalizes larger errors more heavily, which is important when predicting user ratings.
 
 ## Baseline Model
-A baseline regression model using numeric features was trained to establish a performance benchmark.
+For our baseline model, we aim to establish a simple yet reasonable predictor for a recipe’s average rating (avg_rating) using features that are readily available at the time a recipe is submitted. We frame this as a regression problem, since the response variable is continuous.
+
+The baseline model uses five features: minutes, n_steps, n_ingredients, and calories as quantitative variables, and first_tag as a categorical variable representing the primary recipe category. These features are directly related to recipe complexity, preparation effort, and nutritional content, which plausibly influence how users perceive and rate recipes.
+
+To preprocess the data, we apply median imputation to numerical features to handle missing values and most-frequent imputation followed by one-hot encoding for the categorical feature. All preprocessing and modeling steps are implemented in a single sklearn pipeline to prevent data leakage.
+
+We use Linear Regression as our baseline model due to its simplicity and interpretability. Model performance is evaluated using Root Mean Squared Error (RMSE) on a held-out test set (80/20 split). This baseline provides a reference point against which we can assess whether more complex models and additional features meaningfully improve predictive performance.
 
 ## Final Model
-The final model uses a Random Forest regressor with engineered features and tuned hyperparameters.
-This model achieved lower RMSE than the baseline model.
+To improve upon the baseline model, we introduce additional feature engineering and use a more flexible modeling approach capable of capturing nonlinear relationships. The response variable remains avg_rating, and we continue to evaluate performance using RMSE on the same held-out test set to ensure a fair comparison.
+
+In addition to the original numerical and categorical features, we apply transformations designed to better reflect the data-generating process. Cooking time (minutes) and calorie counts are right-skewed, so we apply a log transformation to reduce the influence of extreme values. We also engineer ratio-based features such as steps per ingredient and minutes per step, which serve as proxies for recipe complexity and preparation intensity. These features capture structure that raw counts alone cannot, and are more closely aligned with how users may experience a recipe.
+
+For the final model, we use a Random Forest Regressor, which can naturally model nonlinear effects and interactions between features without requiring manual specification. To control model complexity and improve generalization, we tune key hyperparameters including the number of trees (n_estimators), maximum tree depth (max_depth), and minimum samples per leaf (min_samples_leaf).
+
+Hyperparameter selection is performed using GridSearchCV with 5-fold cross-validation, optimizing for negative RMSE. The best-performing configuration uses 400 trees, a maximum depth of 10, and a minimum of 5 samples per leaf.
+
+Compared to the baseline linear regression model, the final model achieves a lower RMSE, indicating improved predictive accuracy. This improvement suggests that nonlinear relationships and interactions between recipe characteristics play an important role in predicting average ratings, and that the engineered features better capture meaningful aspects of recipe complexity and user perception.
 
 ## Fairness Analysis
 A fairness analysis compared model RMSE between recipes with many ingredients and those with fewer ingredients.
