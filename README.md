@@ -148,6 +148,16 @@ Hyperparameter selection is performed using GridSearchCV with 5-fold cross-valid
 Compared to the baseline linear regression model, the final model achieves a lower RMSE, indicating improved predictive accuracy. This improvement suggests that nonlinear relationships and interactions between recipe characteristics play an important role in predicting average ratings, and that the engineered features better capture meaningful aspects of recipe complexity and user perception.
 
 ## Fairness Analysis
-A fairness analysis compared model RMSE between recipes with many ingredients and those with fewer ingredients.
-A permutation test found no evidence that the model performs worse for high-ingredient recipes.
+To evaluate the fairness of our final predictive model, we analyze whether its performance differs systematically across two meaningful subgroups of recipes. Specifically, we define Group X as dessert recipes and Group Y as non-dessert recipes, using the binary feature is_dessert. This grouping is appropriate because desserts often differ from other recipes in terms of sugar content, calories, and preparation style, which could plausibly affect how well the model predicts ratings for each group.
 
+We evaluate fairness using Root Mean Squared Error (RMSE), the same metric used to assess overall model performance. RMSE is appropriate because our prediction task is regression-based and penalizes larger prediction errors more heavily, which aligns with our goal of detecting meaningful differences in model accuracy between groups.
+
+Null Hypothesis (H₀): The model is equally fair across groups; the RMSE for dessert recipes is the same as the RMSE for non-dessert recipes.
+
+Alternative Hypothesis (H₁): The model is not equally fair across groups; the RMSE differs between dessert and non-dessert recipes.
+
+Our test statistic is the absolute difference in RMSE between the two groups. A larger value indicates greater disparity in predictive performance. We conduct a permutation test by repeatedly shuffling group labels and recomputing the RMSE difference to generate an empirical null distribution. We use a significance level of 0.05.
+
+### Results and Conclusion
+
+The resulting p-value was 0.912. Because 0.912 is much greater than 0.05, we fail to reject the null hypothesis. This means we do not have statistically significant evidence that our model performs differently for dessert versus non-dessert recipes under RMSE, so the model appears to be performing comparably across these groups based on our chosen fairness metric.
