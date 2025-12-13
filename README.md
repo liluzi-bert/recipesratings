@@ -30,9 +30,37 @@ The second dataset, interactions, contains 731,927 rows, where each row represen
 
 
 ## Data Cleaning and Exploratory Data Analysis
-The dataset was cleaned by removing invalid entries and standardizing numeric fields. 
-Exploratory analysis showed that recipe ratings are generally high, while features like cooking time and calories
-are right-skewed.
+
+We cleaned and merged the raw recipe and interaction datasets to prepare them for analysis.  
+The recipes dataset contains recipe-level information, while the interactions dataset contains individual user ratings for each recipe.
+First, we performed a left merge between the recipes and interactions tables using the recipe identifier to associate user ratings with each recipe. Ratings with a value of 0 were treated as invalid and replaced with missing values. We then computed the average rating for each recipe by aggregating across all valid user ratings and merged this value back into the recipes dataset, producing a single recipe-level dataframe.
+Next, nutritional information originally stored as string representations of lists was converted into numeric columns. These values were split into individual features such as calories, total fat, sugar, sodium, protein, saturated fat, and carbohydrates. This allowed us to directly analyze nutritional properties without repeated parsing.
+The final cleaned dataset contains one row per recipe, includes the average user rating, and separates nutritional values into meaningful numeric columns. A preview of the cleaned dataset is shown below.
+
+| name                                 |     id |   minutes | submitted   |   avg_rating |   calories |   sugar |
+|:-------------------------------------|-------:|----------:|:------------|-------------:|-----------:|--------:|
+| 1 brownies in the world    best ever | 333281 |        40 | 2008-10-27  |            4 |      138.4 |      50 |
+| 1 in canada chocolate chip cookies   | 453467 |        45 | 2011-04-11  |            5 |      595.1 |     211 |
+| 412 broccoli casserole               | 306168 |        40 | 2008-05-30  |            5 |      194.8 |       6 |
+| millionaire pound cake               | 286009 |       120 | 2008-02-12  |            5 |      878.3 |     326 |
+| 2000 meatloaf                        | 475785 |        90 | 2012-03-06  |            5 |      267   |      12 |
+
+### Univariate Analysis
+Most recipes contain under 500 calories, but the distribution is heavily right-skewed, indicating that a small number of recipes contain extremely high calorie counts.
+
+<iframe src="assets/calories_dist.html" width="800" height="600" frameborder="0"></iframe>
+
+### Bivariate Analysis
+The scatter plot below shows the relationship between total fat and calories in recipes. There is a strong positive association, indicating that recipes with higher fat content 
+tend to have substantially higher calorie counts. This relationship is expected given that fat is a calorie-dense macronutrient, and the trend is consistent across most recipes.
+
+<iframe src="assets/calories_vs_fat.html" width="800" height="600" frameborder="0"></iframe>
+
+### Interesting Aggregates
+The bar chart below shows the top cuisine tags ranked by average calorie content. Recipes tagged with items such as chicken and dietary tend to have higher average calories, suggesting that certain cuisine categories are associated with more calorie-dense meals.
+
+<iframe src="assets/top_cuisine_calories.html" width="800" height="600" frameborder="0"></iframe>
+
 
 ## Assessment of Missingness
 Missingness was assessed for key variables such as calories and cooking time. 
